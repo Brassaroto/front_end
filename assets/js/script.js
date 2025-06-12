@@ -1,21 +1,19 @@
-const sobre = document.querySelector('#about')
+const sobre = document.querySelector("#about");
 
-const formulario = document.querySelector("#formulario")
+const formulario = document.querySelector("#formulario");
 
-const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 async function getApiGithub() {
-	try {
-		// Enviar uma Requisição HTTP para a API do Github
-		const dadosPerfil = await fetch(
-			`https://api.github.com/users/rafaelq80`
-		)
+  try {
+    // Enviar uma Requisição HTTP para a API do Github
+    const dadosPerfil = await fetch(`https://api.github.com/users/Brassaroto`);
 
-		// Converte a Resposta HTTP para o formato JSON
-		const perfil = await dadosPerfil.json()
+    // Converte a Resposta HTTP para o formato JSON
+    const perfil = await dadosPerfil.json();
 
-		// Criando o conteúdo da Seção about
-		let conteudo = `
+    // Criando o conteúdo da Seção about
+    let conteudo = `
     
             <!-- Imagem da seção Sobre -->
             <img src="${perfil.avatar_url}" alt="Foto do perfil do Github - ${perfil.name}" />
@@ -32,54 +30,52 @@ async function getApiGithub() {
                 </div>
             </article>
             
-    `
-		// Adicionar o conteúdo na página index.html, na Seção about
-		sobre.innerHTML += conteudo
-
-	} catch (error) {
-		console.error(error)
-	}
+    `;
+    // Adicionar o conteúdo na página index.html, na Seção about
+    sobre.innerHTML += conteudo;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-formulario.addEventListener("submit", function(event){
+formulario.addEventListener("submit", function (event) {
+  event.preventDefault();
 
-    event.preventDefault()
+  const campoNome = document.querySelector("#nome");
+  const txtNome = document.querySelector("#txtNome");
 
-    const campoNome = document.querySelector("#nome")
-    const txtNome = document.querySelector("#txtNome")
+  if (campoNome.value.length < 3) {
+    txtNome.innerHTML = "O Nome deve ter no mínimo 3 caracteres";
+    campoNome.focus();
+    return;
+  } else {
+    txtNome.innerHTML = "";
+  }
 
-    if(campoNome.value.length < 3){
-        txtNome.innerHTML = "O Nome deve ter no mínimo 3 caracteres"
-        campoNome.focus()
-        return
-    }else{
-        txtNome.innerHTML = ""
-    }
+  const campoEmail = document.querySelector("#email");
+  const txtEmail = document.querySelector("#txtEmail");
 
-     const campoEmail = document.querySelector("#email")
-    const txtEmail = document.querySelector("#txtEmail")
+  if (!campoEmail.value.match(emailRegex)) {
+    txtEmail.innerHTML = "Digite um e-mail válido";
+    campoEmail.focus();
+    return;
+  } else {
+    txtEmail.innerHTML = "";
+  }
 
-    if(!campoEmail.value.match(emailRegex)){
-        txtEmail.innerHTML = "Digite um e-mail válido"
-        campoEmail.focus()
-        return
-    }else{
-        txtEmail.innerHTML = ""
-    }
+  const campoAssunto = document.querySelector("#assunto");
+  const txtAssunto = document.querySelector("#txtAssunto");
 
-    const campoAssunto = document.querySelector("#assunto")
-    const txtAssunto = document.querySelector("#txtAssunto")
+  if (campoAssunto.value.length < 5) {
+    txtAssunto.innerHTML = "O Assunto deve ter no mínimo 5 caracteres";
+    campoAssunto.focus();
+    return;
+  } else {
+    txtAssunto.innerHTML = "";
+  }
 
-    if(campoAssunto.value.length < 5){
-        txtAssunto.innerHTML = "O Assunto deve ter no mínimo 5 caracteres"
-        campoAssunto.focus()
-        return
-    }else{
-        txtAssunto.innerHTML = ""
-    }
+  // Enviar o e-mail
+  formulario.submit();
+});
 
-    // Enviar o e-mail
-    formulario.submit()
-})
-
-getApiGithub()
+getApiGithub();
